@@ -23,14 +23,12 @@ function timer(minutes, seconds){
 
         counter.innerHTML = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
         seconds --;
-        console.log(seconds)
         if (minutes == 0 && seconds == 0){
             outOfTime = true;
             setTimeout(function(){
                 showOutOfTimeModal();
             }, 2000);
         }
-        console.log("out of time: ", outOfTime)
 
         if (seconds >= 0){
             timeoutHandle = setTimeout(tick, 1000);
@@ -44,13 +42,11 @@ function timer(minutes, seconds){
     }
 
     if (!outOfTime){
-        console.log("continuing timer");
         tick();
     }
 }
 
 function showOutOfTimeModal(){
-    console.log("Showing out of time modal");
     outOfTimeModal.style.display = "flex";
     outOfTimeModal.classList.add("show");
     outOfTimeModal.classList.add("modal-content-center");
