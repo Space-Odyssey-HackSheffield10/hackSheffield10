@@ -1,26 +1,54 @@
 <html>
 <head>
     <link rel="stylesheet" href="/app/src/styles/styles.css">
+    <link rel="stylesheet" href="/app/src/styles/modal.css">
+    <link rel="stylesheet" href="/app/src/styles/number-slider.css">
+    <link rel="stylesheet" href="/app/src/styles/chat.css">
 </head>
 <body>
     <div>
-        <img src="app/src/res/space.gif" alt="stars" class="space-background">
-        <img src="app/src/res/spaceship_dashboard.png" alt="spaceship dashboard" class="dashboard-image">
+        <img src="/app/src/res/space.gif" alt="stars" class="space-background">
+        <img src="/app/src/res/spaceship_dashboard.png" alt="spaceship dashboard" class="dashboard-image">
+
         <div class="timer" id="timer"></div>
-        <div class="right-panel">
-            <div class="puzzle-container">
-                <div class="puzzle-grid" id="puzzleGrid"></div>
-                <div class="controls">
-                    <button class="btn" onclick="shufflePuzzle()">Shuffle</button>
-                    <button class="btn" onclick="resetPuzzle()">Reset</button>
+
+        <div class="slider-panel button-effects" onclick="openModal('puzzleModal')">
+            Slider Puzzle
+        </div>
+
+        <div class="chat-panel button-effects" onclick="openModal('chatModal')">
+            Chat
+        </div>
+
+        <!-- Chat Modal -->
+        <div id="chatModal" class="modal-content-left modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('chatModal')">&times;</span>
+                <div class="chat-container">
+                    <p>agent 1: hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah </p>
                 </div>
-                <div class="stats">
-                    Moves: <span id="moveCount">0</span>
+            </div>
+        </div>
+
+        <!-- Slider Puzzle Modal -->
+        <div id="puzzleModal" class="modal-content-right modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('puzzleModal')">&times;</span>
+                <div class="puzzle-container">
+                    <div class="puzzle-grid" id="puzzleGrid"></div>
+                    <div class="controls">
+                        <button class="btn" onclick="shufflePuzzle()">Shuffle</button>
+                        <button class="btn" onclick="resetPuzzle()">Reset</button>
+                    </div>
+                    <div class="stats">
+                        Moves: <span id="moveCount">0</span>
+                    </div>
+                    <div class="win-message" id="winMessage">🎉 Puzzle Solved! 🎉</div>
                 </div>
-                <div class="win-message" id="winMessage">🎉 Puzzle Solved! 🎉</div>
             </div>
         </div>
     </div>
     <script src="app/src/scripts/number-slider.js"></script>
+    <script src="app/src/scripts/modal.js"></script>
 </body>
 </html>

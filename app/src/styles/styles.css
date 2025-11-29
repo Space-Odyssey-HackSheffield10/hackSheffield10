@@ -43,116 +43,57 @@ body {
     padding-right: 0;
 }
 
-.right-panel {
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  width: 400px;
-  height: 550px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+@font-face{
+    font-family: "digital-clock-font";
+    src: url("../fonts/E1234.ttf") format(truetype);
+    /* font-style: normal;
+    font-weight: normal;
+    font-display: swap; */
+}
+
+.timer {
+    background-color: white;
+    color: red;
+    font-family: digital-clock-font;
+    font-size: 500%;
+    margin-left: 5%;
+    margin-top: 5%;
+    padding-right: 0;
+}
+
+
+
+.button-effects {
+  background: rgba(19, 19, 19, 0.7);
+  color: rgb(12, 153, 12);
+  font-weight: bold;
+  font-family:'Courier New', Courier, monospace;
+  text-shadow: 2px 2px 8px rgb(94, 94, 94);
+  border-radius: 5px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: larger;
 }
 
-/* NUMBER SLIDER CSS */
-.puzzle-container {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
+.slider-panel {
+  position: absolute;
+  top: 60vh;
+  right: 37vw;
+  width: 12vw;
+  height: 50px;
 }
 
-.puzzle-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 80px);
-    grid-template-rows: repeat(4, 80px);
-    gap: 5px;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 5px;
-    border-radius: 5px;
+.button-effects:hover {
+  background: rgba(65, 65, 65, 0.7);
 }
 
-.tile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    font-weight: bold;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    user-select: none;
-}
-
-.tile:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
-}
-
-.tile.empty {
-    background: transparent;
-    border: 2px dashed rgba(255, 255, 255, 0.2);
-    cursor: default;
-}
-
-.tile.empty:hover {
-    transform: none;
-    box-shadow: none;
-}
-
-.controls {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.btn {
-    padding: 10px 20px;
-    font-size: 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 0 5px;
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-.stats {
-    margin-top: 15px;
-    color: white;
-    font-size: 18px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-.win-message {
-    margin-top: 15px;
-    color: #4ade80;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    display: none;
-}
-
-.win-message.show {
-    display: block;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+.chat-panel {
+  position: absolute;
+  top: 60vh;
+  right: 64vw;
+  width: 10vw;
+  height: 50px;
 }
