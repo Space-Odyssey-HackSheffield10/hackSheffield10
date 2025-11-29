@@ -1,0 +1,78 @@
+/* Modal CSS */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  position: relative;
+  background: rgba(20, 20, 40, 0.95);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+  animation: modalFadeIn 0.3s ease;
+  pointer-events: auto;
+}
+
+.modal-content-right {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.modal-content-left {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 18%;
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.close {
+  position: absolute;
+  top: 7px;
+  right: 12px;
+  color: #aaa;
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 9999;
+}
+
+.close:hover,
+.close:focus {
+  color: #fff;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
