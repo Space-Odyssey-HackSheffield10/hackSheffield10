@@ -1,13 +1,18 @@
-.under {
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.space-background {
   position: absolute;
   left: 0px;
   top: 0px;
   z-index: -1;
   width: 100%;
-  height: 100%;
+  height: 75vh;
 }
 
-.over {
+.dashboard-image {
   position: absolute;
   left: 0px;
   top: 0px;
