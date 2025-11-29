@@ -15,10 +15,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = [
-    "http://0.0.0.0:8000"
-]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
