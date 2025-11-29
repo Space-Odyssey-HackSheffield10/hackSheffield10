@@ -22,7 +22,7 @@ async function sendMessage() {
     input.value = "";
 
     try {
-        const response = await fetch("http://localhost:8000/chat", {
+        const response = await fetch("/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
