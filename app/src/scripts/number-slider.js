@@ -118,14 +118,26 @@ function checkWin() {
 initPuzzle();
 
 
-let timeoutHandle
+let timeoutHandle;
+let outOfTime = false;
+// let modal = document.getElementById("outOfTimeModal");
+
 
 function timer(minutes, seconds){
     function tick(){
         let counter = document.getElementById("timer");
+
+
         counter.innerHTML = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
         seconds --;
+        console.log(seconds)
+        if (minutes == 0 && seconds == 0){
+            showOutOfTimeModal();
+            outOfTime = true;
+        }
         // console.log(counter)
+        console.log("out of time: ", outOfTime)
+    
         if (seconds >= 0){
             timeoutHandle = setTimeout(tick, 1000);
         } else {
@@ -133,6 +145,9 @@ function timer(minutes, seconds){
                 setTimeout(function () {
                     timer(minutes - 1, 59);
                 }, 1000);
+            } else {
+                console.log('blah blah')
+                timer(0, 0)
             }
         }
     }
@@ -140,4 +155,14 @@ function timer(minutes, seconds){
     
 }
 
-timer(2, 0);
+timer(0, 3);
+
+
+function showOutOfTimeModal(){
+    const modal = document.getElementById("outOfTimeModal");
+    modal.style.display = "flex";
+    modal.classList.add("show");
+}
+
+
+
