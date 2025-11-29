@@ -25,6 +25,24 @@ body {
   height: 100%;
 }
 
+@font-face{
+    font-family: "digital-clock-font";
+    src: url("../fonts/E1234.ttf") format(truetype);
+    /* font-style: normal;
+    font-weight: normal;
+    font-display: swap; */
+}
+
+.timer {
+    background-color: white;
+    color: red;
+    font-family: digital-clock-font;
+    font-size: 500%;
+    margin-left: 5%;
+    margin-top: 5%;
+    padding-right: 0;
+}
+
 .right-panel {
   position: absolute;
   top: 10%;

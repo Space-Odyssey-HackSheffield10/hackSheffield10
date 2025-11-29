@@ -116,3 +116,28 @@ function checkWin() {
 
 // Initialize on load
 initPuzzle();
+
+
+let timeoutHandle
+
+function timer(minutes, seconds){
+    function tick(){
+        let counter = document.getElementById("timer");
+        counter.innerHTML = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
+        seconds --;
+        // console.log(counter)
+        if (seconds >= 0){
+            timeoutHandle = setTimeout(tick, 1000);
+        } else {
+            if (minutes >= 1){
+                setTimeout(function () {
+                    timer(minutes - 1, 59);
+                }, 1000);
+            }
+        }
+    }
+    tick();
+    
+}
+
+timer(2, 0);
