@@ -155,7 +155,7 @@ function timer(minutes, seconds){
     
 }
 
-timer(0, 3);
+timer(2, 0);
 
 
 function showOutOfTimeModal(){

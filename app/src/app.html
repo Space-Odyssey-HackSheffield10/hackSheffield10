@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="/app/src/styles/styles.css">
@@ -7,10 +8,22 @@
 </head>
 <body>
     <div>
+        <audio id="backgroundMusic" loop>
+            <source src="/app/src/res/buckshot_roulette_general_release.mp3" type="audio/mpeg">
+             Your browser does not support the audio element.
+        </audio>
+        <div class="starting-screen" id="startingScreen">
+            <h1>Space Odyssey</h1>
+            <input type="text" placeholder="Your Name"/>
+            <button onclick="closeStartingScreen()">Start</button>
+        </div>
+
         <img src="/app/src/res/space.gif" alt="stars" class="space-background">
         <img src="/app/src/res/spaceship_dashboard.png" alt="spaceship dashboard" class="dashboard-image">
 
-        <div class="timer" id="timer"></div>
+        <div class="timer" id="timer">
+            <!-- <span id="timer"></span> -->
+        </div>
 
         <div class="slider-panel button-effects" onclick="openModal('puzzleModal')">
             Slider Puzzle
@@ -24,8 +37,13 @@
         <div id="chatModal" class="modal-content-left modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('chatModal')">&times;</span>
-                <div class="chat-container">
+                <div class="chat-container" id="chatContainer">
                     <p>agent 1: hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah </p>
+                </div>
+
+                <div class="chat-input">
+                    <input id="chatMessage" type="text" placeholder="Type your message..." />
+                    <button onclick="sendMessage()">Send</button>
                 </div>
             </div>
         </div>
@@ -63,6 +81,7 @@
 
          <!-- Win Modal -->
     </div>
+    <script src="app/src/scripts/script.js"></script>
     <script src="app/src/scripts/number-slider.js"></script>
     <script src="app/src/scripts/modal.js"></script>
 </body>
