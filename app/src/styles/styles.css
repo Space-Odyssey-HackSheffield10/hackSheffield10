@@ -27,17 +27,21 @@ body {
 
 .right-panel {
   position: absolute;
-  top: 10%;
-  right: 5%;
-  width: 400px;
-  height: 550px;
+  top: 58%;
+  right: 4.5%;
+  width: 685px;
+  height: 350px;
   background: rgba(0, 0, 0, 0.5);
-  border-radius: 15px;
   padding: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
+  clip-path: polygon(1% 0, 54% 0, 100% 76%, 9% 76%);
+}
+
+.right-panel:hover {
+  background: rgba(44, 44, 44, 0.5);
 }
 
 /* NUMBER SLIDER CSS */
