@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="/app/src/styles/styles.css">
@@ -24,8 +25,13 @@
         <div id="chatModal" class="modal-content-left modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal('chatModal')">&times;</span>
-                <div class="chat-container">
+                <div class="chat-container" id="chatContainer">
                     <p>agent 1: hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah hello blah blah </p>
+                </div>
+
+                <div class="chat-input">
+                    <input id="chatMessage" type="text" placeholder="Type your message..." />
+                    <button onclick="sendMessage()">Send</button>
                 </div>
             </div>
         </div>
