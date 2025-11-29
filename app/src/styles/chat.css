@@ -1,0 +1,12 @@
+.chat-container {
+    display: inline-block;
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    height: 55vh;
+    width: 30vw;
+    color: white;
+    background: rgba(19, 19, 19, 0.7);
+    color: rgb(12, 153, 12);
+    font-family:'Courier New', Courier, monospace;
+}
