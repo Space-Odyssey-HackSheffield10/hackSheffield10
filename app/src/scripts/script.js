@@ -8,7 +8,7 @@ function closeStartingScreen() {
         console.log('Audio autoplay prevented:', error);
     });
 
-    timer(0, 3);
+    timer(2, 0);
 }
 
 
