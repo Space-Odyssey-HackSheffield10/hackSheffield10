@@ -1,6 +1,14 @@
 # hackSheffield10
 
 ## FOR NICOLE
+
+<b> THE THINGS WE NEED FOR THE GRAFANA
+- name
+- time
+- messages sent to the bots
+- messages sent 
+</b>
+
 To run the application locally follow these simple steps in a terminal
 ```
 python -m venv .venv
