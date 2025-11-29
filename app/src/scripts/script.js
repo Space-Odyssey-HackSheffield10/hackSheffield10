@@ -8,16 +8,28 @@ function closeStartingScreen() {
         console.log('Audio autoplay prevented:', error);
     });
 
-    timer(2, 0);
+    timer(0, 3);
 }
 
-let timeoutHandle
+
+
+let timeoutHandle;
+const outOfTimeModal = document.getElementById("outOfTimeModal");
 
 function timer(minutes, seconds){
+    let outOfTime = false;
     function tick(){
         let counter = document.getElementById("timer");
+
         counter.innerHTML = minutes.toString() + ":" + (seconds < 10 ? "0" : "") + String(seconds);
         seconds --;
+        if (minutes == 0 && seconds == 0){
+            outOfTime = true;
+            setTimeout(function(){
+                showOutOfTimeModal();
+            }, 2000);
+        }
+
         if (seconds >= 0){
             timeoutHandle = setTimeout(tick, 1000);
         } else {
@@ -28,5 +40,14 @@ function timer(minutes, seconds){
             }
         }
     }
-    tick();
+
+    if (!outOfTime){
+        tick();
+    }
+}
+
+function showOutOfTimeModal(){
+    outOfTimeModal.style.display = "flex";
+    outOfTimeModal.classList.add("show");
+    outOfTimeModal.classList.add("modal-content-center");
 }
