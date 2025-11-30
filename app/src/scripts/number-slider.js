@@ -111,6 +111,19 @@ function checkWin() {
 
     if (isSolved && moves > 0) {
         document.getElementById('winMessage').classList.add('show');
+        
+        // Record puzzle completion
+        const playerName = window.playerName || "anonymous";
+        fetch("http://localhost:8000/puzzle/attempt", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                player_name: playerName,
+                completed: true
+            })
+        }).catch(err => console.error("Failed to record puzzle completion:", err));
     }
 }
 

@@ -1,6 +1,24 @@
+let playerName = "anonymous";
+let gameStartTime = null;
+
 function closeStartingScreen() {
     const startingScreen = document.getElementById('startingScreen');
+    const nameInput = document.querySelector('.starting-screen input');
+    
+    // Get player name from input
+    playerName = nameInput.value.trim() || "anonymous";
+    
     startingScreen.style.display = 'none';
+
+    // Record game start
+    gameStartTime = Date.now();
+    fetch("http://localhost:8000/game/start", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ player_name: playerName })
+    }).catch(err => console.error("Failed to record game start:", err));
 
     // Start playing background music
     const audio = document.getElementById('backgroundMusic');
@@ -27,6 +45,7 @@ function timer(minutes, seconds){
             outOfTime = true;
             setTimeout(function(){
                 showOutOfTimeModal();
+                recordGameEnd(false); // Game failed due to timeout
             }, 2000);
         }
 
@@ -51,3 +70,24 @@ function showOutOfTimeModal(){
     outOfTimeModal.classList.add("show");
     outOfTimeModal.classList.add("modal-content-center");
 }
+
+function recordGameEnd(success) {
+    if (!gameStartTime) return;
+    
+    const duration = (Date.now() - gameStartTime) / 1000; // Convert to seconds
+    
+    fetch("http://localhost:8000/game/end", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            player_name: playerName,
+            duration: duration,
+            success: success
+        })
+    }).catch(err => console.error("Failed to record game end:", err));
+}
+
+// Export playerName so other scripts can use it
+window.playerName = playerName;
