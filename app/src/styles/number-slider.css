@@ -9,8 +9,8 @@
 
 .puzzle-grid {
     display: grid;
-    grid-template-columns: repeat(4, 80px);
-    grid-template-rows: repeat(4, 80px);
+    grid-template-columns: repeat(3, 107px);
+    grid-template-rows: repeat(3, 107px);
     gap: 5px;
     background: rgba(0, 0, 0, 0.3);
     padding: 5px;
