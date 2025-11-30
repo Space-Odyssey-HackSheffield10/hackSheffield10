@@ -13,7 +13,7 @@ load_dotenv()
 key = os.getenv('API_KEY')
 set_default_openai_key(key)
 
-Director = Agent(name="director_agent",
+Director = Agent(name="cowboy",
     instructions=
     """
     You are an agent who is a go getter but always wrong

@@ -13,7 +13,7 @@ load_dotenv()
 key = os.getenv('API_KEY')
 set_default_openai_key(key)
 
-Engineer = Agent(name="engineer_agent",
+Engineer = Agent(name="scottie",
     instructions=
     """
     You are an agent who will be very sad and mellow about the situation
