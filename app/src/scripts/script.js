@@ -1,3 +1,5 @@
+const audio = document.getElementById('backgroundMusic');
+
 async function closeStartingScreen() {
     const startingScreen = document.getElementById('startingScreen');
     startingScreen.style.display = 'none';
@@ -26,12 +28,16 @@ async function closeStartingScreen() {
 
 
     // Start playing background music
-    const audio = document.getElementById('backgroundMusic');
     audio.play().catch(error => {
         console.log('Audio autoplay prevented:', error);
     });
 
+    
     timer(2, 0);
+}
+
+function pauseMusic(){
+    audio.pause();
 }
 
 
@@ -68,6 +74,10 @@ function timer(minutes, seconds){
             }
         } else { // if game won show wonModal
             showWonModal();
+            pauseMusic();
+            const victoryMusic = document.getElementById("victoryMusic");
+            victoryMusic.play();
+            
         }
         
     }
