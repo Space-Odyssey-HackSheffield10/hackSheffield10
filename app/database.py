@@ -38,19 +38,21 @@ def add_new_user(id: str, name: str):
 
 def update_user_messages(id: str, messages: int):
     container = get_cosmos_db()
-    container.upsert_item(
-        {
-            "id" : id,
-            "messages" : messages
-        }
+    container.patch_item(
+            item=id,
+            partition_key=id,
+            patch_operations=[
+                {"op": "replace", "path": "/messages", "value": messages}
+            ]
     )
 
 
 def update_user_time(id: str, time: int):
     container = get_cosmos_db()
-    container.upsert_item(
-        {
-            "id": id,
-            "time": time
-        }
+    container.patch_item(
+            item=id,
+            partition_key=id,
+            patch_operations=[
+                {"op": "replace", "path": "/time", "value": time}
+            ]
     )

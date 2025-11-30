@@ -8,9 +8,9 @@ import os
 from dotenv import load_dotenv
 
 # Local Imports
-from app.models import AgentRequest, AgentResponse, StartGameResponse, StartGameRequest
+from app.models import AgentRequest, AgentResponse, StartGameResponse, StartGameRequest, AddTimeRequest, AddMessagesRequest
 from app.agents.triage_agent import run_agent
-from app.database import add_new_user, get_cosmos_db
+from app.database import add_new_user, get_cosmos_db, update_user_time, update_user_messages
 
 # Third Party Imports
 from fastapi import FastAPI, Request
@@ -72,5 +72,23 @@ def start_game(body: StartGameRequest):
             conversation_id=conversation_id,
             username=body.message                      
         )
+    except Exception as e:
+        raise e
+    
+
+@app.post("/add_time")
+def add_time(body: AddTimeRequest):
+    try:
+        update_user_time(body.conversation_id, body.time)
+    except Exception as e:
+        raise e
+
+
+@app.post("/add_messages")
+def add_messages(body: AddMessagesRequest):
+    try:
+        conv = openai_client.conversations.items.list(body.conversation_id)
+        messages = len(conv.data)
+        update_user_messages(body.conversation_id, messages)
     except Exception as e:
         raise e

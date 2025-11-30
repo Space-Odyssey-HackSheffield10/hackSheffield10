@@ -21,3 +21,10 @@ class StartGameResponse(BaseModel):
     status: str = Field(description="string to show the success of the request")
     conversation_id: str = Field(description="the conversation id for the specific sessions")
     username: str = Field(description="the user name")
+
+class AddTimeRequest(BaseModel):
+    conversation_id: str = Field(description="the conversation id")
+    time: int = Field(description="for adding the time to the cosmos db")
+
+class AddMessagesRequest(BaseModel):
+    conversation_id: str = Field(description="the conversation id")
