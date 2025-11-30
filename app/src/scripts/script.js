@@ -33,7 +33,7 @@ async function closeStartingScreen() {
     });
 
     
-    timer(2, 0);
+    timer(5, 0);
 }
 
 function pauseMusic(){
