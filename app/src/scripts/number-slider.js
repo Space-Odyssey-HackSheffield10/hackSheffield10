@@ -1,16 +1,27 @@
 let tiles = [];
-let emptyIndex = 15;
+let emptyIndex = 8;
 let moves = 0;
+let num_list = [1, 2, 3, 4, 5, 6, 7, 8];
+let won = false;
 
 // Initialize the puzzle
 function initPuzzle() {
-    tiles = Array.from({ length: 16 }, (_, i) => i + 1);
-    tiles[15] = 0; // 0 represents the empty space
-    emptyIndex = 15;
+    tiles = Array.from({ length: 9 }, (_, i) => i + 1);
+    tiles[8] = 0; // 0 represents the empty space
+    emptyIndex = 8;
     moves = 0;
     updateMoveCount();
     renderPuzzle();
+    shuffleList(num_list);
     shufflePuzzle();
+}
+
+function shuffleList(array){
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    console.log(num_list);
 }
 
 // Render the puzzle grid
@@ -31,12 +42,11 @@ function renderPuzzle() {
 
 // Check if tile can be moved
 function canMove(index) {
-    const row = Math.floor(index / 4);
-    const col = index % 4;
-    const emptyRow = Math.floor(emptyIndex / 4);
-    const emptyCol = emptyIndex % 4;
+    const row = Math.floor(index / 3);
+    const col = index % 3;
+    const emptyRow = Math.floor(emptyIndex / 3);
+    const emptyCol = emptyIndex % 3;
 
-    // Check if tile is adjacent to empty space
     return (
         (row === emptyRow && Math.abs(col - emptyCol) === 1) ||
         (col === emptyCol && Math.abs(row - emptyRow) === 1)
@@ -46,7 +56,6 @@ function canMove(index) {
 // Move a tile
 function moveTile(index) {
     if (canMove(index)) {
-        // Swap tile with empty space
         [tiles[index], tiles[emptyIndex]] = [tiles[emptyIndex], tiles[index]];
         emptyIndex = index;
         moves++;
@@ -57,7 +66,6 @@ function moveTile(index) {
 
 // Shuffle the puzzle
 function shufflePuzzle() {
-    // Perform random valid moves to ensure solvability
     const shuffleMoves = 100;
     for (let i = 0; i < shuffleMoves; i++) {
         const validMoves = getValidMoves();
@@ -74,23 +82,23 @@ function shufflePuzzle() {
 // Get all valid moves
 function getValidMoves() {
     const validMoves = [];
-    const row = Math.floor(emptyIndex / 4);
-    const col = emptyIndex % 4;
+    const row = Math.floor(emptyIndex / 3);
+    const col = emptyIndex % 3;
 
-    // Check up, down, left, right
-    if (row > 0) validMoves.push(emptyIndex - 4); // up
-    if (row < 3) validMoves.push(emptyIndex + 4); // down
+    if (row > 0) validMoves.push(emptyIndex - 3); // up
+    if (row < 2) validMoves.push(emptyIndex + 3); // down
     if (col > 0) validMoves.push(emptyIndex - 1); // left
-    if (col < 3) validMoves.push(emptyIndex + 1); // right
+    if (col < 2) validMoves.push(emptyIndex + 1); // right
 
     return validMoves;
 }
 
 // Reset to solved state
 function resetPuzzle() {
-    tiles = Array.from({ length: 16 }, (_, i) => i + 1);
-    tiles[15] = 0;
-    emptyIndex = 15;
+    // tiles = Array.from({ length: 9 }, (_, i) => i + 1);
+    tiles = num_list;
+    tiles[8] = 0;
+    emptyIndex = 8;
     moves = 0;
     updateMoveCount();
     document.getElementById('winMessage').classList.remove('show');
@@ -105,14 +113,15 @@ function updateMoveCount() {
 // Check if puzzle is solved
 async function checkWin() {
     const isSolved = tiles.every((value, index) => {
-        if (index === 15) return value === 0;
-        return value === index + 1;
+        if (index === 8) return value === 0;
+        return value === num_list[index];
     });
     const conversation_id = localStorage.getItem("conversation_id");
     const playerName = localStorage.getItem("username") || "anonymous";
 
     if (isSolved && moves > 0) {
         document.getElementById('winMessage').classList.add('show');
+        won = true;
 
         const counter = document.getElementById("timer");
         const [minutes, seconds] = counter.innerHTML.split(":").map(Number);
