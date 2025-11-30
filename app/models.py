@@ -28,3 +28,7 @@ class AddTimeRequest(BaseModel):
 
 class AddMessagesRequest(BaseModel):
     conversation_id: str = Field(description="the conversation id")
+
+class PuzzleList(BaseModel):
+    conversation_id: str
+    num_list: list[int]

@@ -3,6 +3,29 @@ let emptyIndex = 8;
 let moves = 0;
 let num_list = [1, 2, 3, 4, 5, 6, 7, 8];
 
+async function sendNumListOnce() {
+    const conversation_id = localStorage.getItem("conversation_id") || crypto.randomUUID();
+    localStorage.setItem("conversation_id", conversation_id);
+    console.log(num_list);
+    try {
+        const response = await fetch("/save_list", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                conversation_id,
+                num_list
+            })
+        });
+
+        const data = await response.json();
+        console.log("List saved:", data);
+    } catch (err) {
+        console.error("Error saving list:", err);
+    }
+}
+
 // Initialize the puzzle
 function initPuzzle() {
     tiles = Array.from({ length: 9 }, (_, i) => i + 1);
@@ -13,6 +36,8 @@ function initPuzzle() {
     renderPuzzle();
     shuffleList(num_list);
     shufflePuzzle();
+    sendNumListOnce();
+
 }
 
 function shuffleList(array){
@@ -20,7 +45,7 @@ function shuffleList(array){
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-    console.log(num_list);
+    console.log(num_list);    
 }
 
 // Render the puzzle grid

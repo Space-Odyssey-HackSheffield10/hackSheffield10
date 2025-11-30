@@ -24,6 +24,12 @@ def get_cosmos_db():
     return db.get_container_client("users")
 
 
+def get_cosmos_puzzle_db():
+    client = CosmosClient(URL, credential=KEY)
+    db = client.get_database_client("spaceodyssey")
+    return db.get_container_client("puzzles")
+
+
 def add_new_user(id: str, name: str):
     container = get_cosmos_db()
     container.upsert_item(
@@ -81,3 +87,23 @@ def update_user_time(id: str, time: int):
                 {"op": "replace", "path": "/time", "value": time}
             ]
     )
+
+
+def save_list(conversation_id: str, num_list: list[int]):
+    container = get_cosmos_puzzle_db()
+    container.upsert_item(
+        {
+            "id" : conversation_id,
+            "num_list" : num_list
+            
+        }
+    )
+
+
+def get_list(conversation_id: str):
+    container = get_cosmos_puzzle_db()
+    try:
+        item = container.read_item(item=conversation_id, partition_key=conversation_id)
+        return item["num_list"]
+    except Exception:
+        return None

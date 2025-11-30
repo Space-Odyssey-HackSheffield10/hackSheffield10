@@ -11,9 +11,9 @@ import asyncio
 import json
 
 # Local Imports
-from app.models import AgentRequest, AgentResponse, StartGameResponse, StartGameRequest, AddTimeRequest, AddMessagesRequest
+from app.models import AgentRequest, AgentResponse, StartGameResponse, StartGameRequest, AddTimeRequest, AddMessagesRequest, PuzzleList
 from app.agents.triage_agent import run_agent
-from app.database import add_new_user, get_cosmos_db, update_user_time, update_user_messages, update_message_timeout
+from app.database import add_new_user, get_cosmos_db, update_user_time, update_user_messages, update_message_timeout, save_list
 from app.timeout_manager import timeout_watchdog
 
 # Third Party Imports
@@ -136,3 +136,9 @@ async def sse_events(conversation_id: str):
             listeners.pop(conversation_id, None)
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+@app.post("/save_list")
+async def update_list(puzzle: PuzzleList):
+    # Upsert so if the conversation_id exists, it updates
+    save_list(puzzle.conversation_id, puzzle.num_list)
