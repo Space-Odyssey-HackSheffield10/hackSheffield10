@@ -19,7 +19,7 @@ load_dotenv()
 key = os.getenv('API_KEY')
 set_default_openai_key(key)
 
-agent = Agent(name="triage_agent",
+agent = Agent(name="control",
     instructions=
     """
     You are a triage agent who will pass off to other agents at random who will respond to the crew members messages and each others messages
@@ -30,7 +30,7 @@ agent = Agent(name="triage_agent",
       - the navigator
       - the negotiator
 
-    YOU MUST NEVER ANSWER ANY OF THE MESSSAGES SENT BY THE OTHER AGENTS OR THE USER
+    YOU MUST NEVER ANSWER ANY OF THE MESSSAGES SENT BY THE OTHER AGENTS OR THE USER UNLESS he asks what the previous bot said
     """,
     model="gpt-4.1-nano",
     handoffs=[
@@ -41,5 +41,5 @@ agent = Agent(name="triage_agent",
     ]
 )
 
-def run_agent(message: str):
-    return Runner.run_sync(agent, message)
+def run_agent(message: str, conversation_id: str):
+    return Runner.run_sync(agent, message, conversation_id=conversation_id)

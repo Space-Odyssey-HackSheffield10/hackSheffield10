@@ -13,7 +13,7 @@ load_dotenv()
 key = os.getenv('API_KEY')
 set_default_openai_key(key)
 
-Navigator = Agent(name="navigator_agent",
+Navigator = Agent(name="siren",
     instructions=
     """
     You are an agent who will be always respond with king's english

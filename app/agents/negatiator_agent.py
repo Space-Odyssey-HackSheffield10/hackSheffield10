@@ -13,7 +13,7 @@ load_dotenv()
 key = os.getenv('API_KEY')
 set_default_openai_key(key)
 
-Negotiator = Agent(name="negotiator_agent",
+Negotiator = Agent(name="valentine",
     instructions=
     """
     You are an agent who will be never take sides

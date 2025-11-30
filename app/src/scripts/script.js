@@ -1,6 +1,29 @@
-function closeStartingScreen() {
+async function closeStartingScreen() {
     const startingScreen = document.getElementById('startingScreen');
     startingScreen.style.display = 'none';
+
+    // add the user to database and save the conversation id
+    const message = document.getElementById('Name').value.trim();
+
+    try {
+        const response = await fetch("/start_game", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+        localStorage.setItem("conversation_id", data.conversation_id)
+        localStorage.setItem("username", data.username)
+
+        console.log(data.status)
+    } catch (err) {
+        console.error(err);
+    }
+
 
     // Start playing background music
     const audio = document.getElementById('backgroundMusic');

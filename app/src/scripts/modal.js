@@ -13,12 +13,13 @@ function closeModal(modalName) {
 
 async function sendMessage() {
     const input = document.getElementById("chatMessage");
-    const chatContainer = document.getElementById("chatContainer");
     const message = input.value.trim();
+    const conversation_id = localStorage.getItem("conversation_id")
+    const username = localStorage.getItem("username")
     if (!message) return;
 
     // Add user's message to chat
-    appendMessage("you", message);
+    appendMessage(username, message, "green");
     input.value = "";
 
     try {
@@ -28,25 +29,42 @@ async function sendMessage() {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*"
             },
-            body: JSON.stringify({ message })
+            body: JSON.stringify({ 
+                message,
+                conversation_id
+            })
         });
 
         const data = await response.json();
 
-        console.log(data)
+        console.log(data);
+
+        agent_name = data.agent_name;
+        colour = "white"
+        if (agent_name === "scottie") {
+            colour = "blue"
+        } else if (agent_name === "cowboy") {
+            colour = "red"
+        } else if (agent_name === "siren") {
+            colour = "gold"
+        } else if (agent_name === "valentine") {
+            colour = "magenta"
+        }
+
 
         // Add agent response to chat
-        appendMessage("agent", data.content);
+        appendMessage(agent_name, data.content, colour);
     } catch (err) {
         appendMessage("agent", "Error contacting server.");
         console.error(err);
     }
 }
 
-function appendMessage(sender, text) {
+function appendMessage(sender, text, colour) {
     const chatContainer = document.getElementById("chatContainer");
     const p = document.createElement("p");
     p.textContent = `${sender}: ${text}`;
+    p.style.color = colour;
     chatContainer.appendChild(p);
 
     // Auto-scroll to bottom
