@@ -4,3 +4,4 @@ from .director_agent import Director
 from .engineer_agent import Engineer
 from .navigator_agent import Navigator
 from .negatiator_agent import Negotiator
+from .agent_tools import get_the_puzzle_solution

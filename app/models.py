@@ -8,19 +8,23 @@ from pydantic import BaseModel, Field
 
 class AgentResponse(BaseModel):
     content: str = Field(description="response from the agent")
+    agent_name: str = Field(description="the name of the agent")
 
 class AgentRequest(BaseModel):
     message: str = Field(description="the message sent to the agent")
-    player_name: str = Field(default="anonymous", description="name of the player")
+    conversation_id: str = Field(description="the conversation id")
 
-class GameStartRequest(BaseModel):
-    player_name: str = Field(description="name of the player starting the game")
+class StartGameRequest(BaseModel):
+    message: str = Field(description="the name of the user")
 
-class GameEndRequest(BaseModel):
-    player_name: str = Field(description="name of the player")
-    duration: float = Field(description="game duration in seconds")
-    success: bool = Field(description="whether the game was completed successfully")
+class StartGameResponse(BaseModel):
+    status: str = Field(description="string to show the success of the request")
+    conversation_id: str = Field(description="the conversation id for the specific sessions")
+    username: str = Field(description="the user name")
 
-class PuzzleEventRequest(BaseModel):
-    player_name: str = Field(description="name of the player")
-    completed: bool = Field(default=False, description="whether puzzle was completed")
+class AddTimeRequest(BaseModel):
+    conversation_id: str = Field(description="the conversation id")
+    time: int = Field(description="for adding the time to the cosmos db")
+
+class AddMessagesRequest(BaseModel):
+    conversation_id: str = Field(description="the conversation id")

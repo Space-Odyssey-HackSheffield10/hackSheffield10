@@ -1,24 +1,34 @@
-let playerName = "anonymous";
-let gameStartTime = null;
-
-function closeStartingScreen() {
+async function closeStartingScreen() {
     const startingScreen = document.getElementById('startingScreen');
     const nameInput = document.querySelector('.starting-screen input');
-    
+
     // Get player name from input
     playerName = nameInput.value.trim() || "anonymous";
-    
+
     startingScreen.style.display = 'none';
 
-    // Record game start
-    gameStartTime = Date.now();
-    fetch("http://localhost:8000/game/start", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ player_name: playerName })
-    }).catch(err => console.error("Failed to record game start:", err));
+    // add the user to database and save the conversation id
+    const message = document.getElementById('Name').value.trim();
+
+    try {
+        const response = await fetch("/start_game", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+            body: JSON.stringify({ message })
+        });
+
+        const data = await response.json();
+        localStorage.setItem("conversation_id", data.conversation_id)
+        localStorage.setItem("username", data.username)
+
+        console.log(data.status)
+    } catch (err) {
+        console.error(err);
+    }
+
 
     // Start playing background music
     const audio = document.getElementById('backgroundMusic');

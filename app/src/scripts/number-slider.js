@@ -103,27 +103,53 @@ function updateMoveCount() {
 }
 
 // Check if puzzle is solved
-function checkWin() {
+async function checkWin() {
     const isSolved = tiles.every((value, index) => {
         if (index === 15) return value === 0;
         return value === index + 1;
     });
+    const conversation_id = localStorage.getItem("conversation_id")
 
     if (isSolved && moves > 0) {
         document.getElementById('winMessage').classList.add('show');
-        
-        // Record puzzle completion
-        const playerName = window.playerName || "anonymous";
-        fetch("http://localhost:8000/puzzle/attempt", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                player_name: playerName,
-                completed: true
-            })
-        }).catch(err => console.error("Failed to record puzzle completion:", err));
+
+        const counter = document.getElementById("timer");
+        const [minutes, seconds] = counter.innerHTML.split(":").map(Number);
+        const time = (minutes * 60) + seconds
+
+        try {
+            const response = await fetch("/add_time", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify({
+                    conversation_id,
+                    time
+                })
+            });
+            console.log("SUCCESS added time")
+        } catch (err) {
+            console.error(err);
+        }
+
+        try {
+            const response = await fetch("/add_messages", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify({
+                    conversation_id
+                })
+            });
+            console.log("SUCCESS added message")
+        } catch (err) {
+            console.error(err);
+        }
+
     }
 }
 

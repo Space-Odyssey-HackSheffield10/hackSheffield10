@@ -4,3 +4,4 @@ pydantic
 openai-agents
 prometheus-client
 prometheus-fastapi-instrumentator
+azure-cosmos
