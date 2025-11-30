@@ -4,12 +4,34 @@ function openModal(modalName) {
     // Trigger reflow to ensure transition works
     modal.offsetHeight;
     modal.style.transform = 'translateX(100%)';
+
+    const conversation_id = localStorage.getItem("conversation_id");
+    if (conversation_id) {
+        startEventStream(conversation_id);
+    }
 }
 
 function closeModal(modalName) {
     const modal = document.getElementById(modalName);
     modal.style.display = 'none';
 }
+
+function startEventStream(conversation_id) {
+    const evtSource = new EventSource(`/events/${conversation_id}`);
+
+    evtSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        let colour = "white";
+        if (data.agent_name === "scottie") colour = "blue";
+        else if (data.agent_name === "cowboy") colour = "red";
+        else if (data.agent_name === "siren") colour = "gold";
+        else if (data.agent_name === "valentine") colour = "magenta";
+
+        appendMessage(data.agent_name, data.text, colour);
+    };
+}
+
 
 async function sendMessage() {
     const input = document.getElementById("chatMessage");
@@ -35,25 +57,8 @@ async function sendMessage() {
             })
         });
 
-        const data = await response.json();
+        console.log("success")
 
-        console.log(data);
-
-        agent_name = data.agent_name;
-        colour = "white"
-        if (agent_name === "scottie") {
-            colour = "blue"
-        } else if (agent_name === "cowboy") {
-            colour = "red"
-        } else if (agent_name === "siren") {
-            colour = "gold"
-        } else if (agent_name === "valentine") {
-            colour = "magenta"
-        }
-
-
-        // Add agent response to chat
-        appendMessage(agent_name, data.content, colour);
     } catch (err) {
         appendMessage("agent", "Error contacting server.");
         console.error(err);
