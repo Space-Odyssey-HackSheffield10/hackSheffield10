@@ -1,5 +1,4 @@
 # hackSheffield10 - Space Odyssey Game Simulator and Data Visualization
----
 
 ## Overview
 Space Odyssey is a first-person game where you must try to safely land your spaceship by solving puzzles using the guidance of your agent comrades. However, not all information your comrades give will help you, so it is up to you to try to decipher their clues and survive!
