@@ -1,15 +1,18 @@
-# hackSheffield10
+# hackSheffield10 - Space Odyssey Game Simulator and Data Visualization
+---
 
-## FOR NICOLE
+## Overview
+Space Odyssey is a first-person game where you must try to safely land your spaceship by solving puzzles using the guidance of your agent comrades. However, not all information your comrades give will help you, so it is up to you to try to decipher their clues and survive!
 
-<b> THE THINGS WE NEED FOR THE GRAFANA
-- name
-- time
-- messages sent to the bots
-- messages sent 
-</b>
+## Tech Stack
+- Vanilla JS, HTML, and CSS frontend
+- FastAPI backend
+- Integration with OpenAI agents for multi-agent and human interaction
+- Azure Cosmos DB for data storage
+- Prometheus and Grafana for data collection and visualization
 
-To run the application locally follow these simple steps in a terminal
+## Running the Application
+To run the application locally follow these simple steps in a terminal:
 ```
 python -m venv .venv
 python -m pip install --upgrade pip
