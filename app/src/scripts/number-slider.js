@@ -2,6 +2,7 @@ let tiles = [];
 let emptyIndex = 8;
 let moves = 0;
 let num_list = [1, 2, 3, 4, 5, 6, 7, 8];
+let won = false;
 
 // Initialize the puzzle
 function initPuzzle() {
@@ -119,6 +120,7 @@ async function checkWin() {
 
     if (isSolved && moves > 0) {
         document.getElementById('winMessage').classList.add('show');
+        won = true;
 
         const counter = document.getElementById("timer");
         const [minutes, seconds] = counter.innerHTML.split(":").map(Number);
