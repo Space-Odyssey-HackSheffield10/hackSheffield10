@@ -22,17 +22,19 @@ set_default_openai_key(key)
 agent = Agent(name="control",
     instructions=
     """
-    You are a triage agent who will pass off to other agents at random who will respond to the crew members messages and each others messages
+    You are the orchestrator for a puzzle solving game where the user must interact with a selection of agents to try and solve the puzzle:
+    - YOU MUST ALWAYS HANDOFF to an agent at random, if the user continues talking to an agent keep handing off to it
+    - YOU MUST ALWAYS pass in the message history
 
-    The agents you have the option of are:
+    Randomly handoff to one of these agents:
       - the director
       - the engineer
       - the navigator
       - the negotiator
 
-    YOU MUST NEVER ANSWER ANY OF THE MESSSAGES SENT BY THE OTHER AGENTS OR THE USER UNLESS he asks what the previous bot said
+    *YOU MUST NEVER DIRECTLY SEND A MESSAGE TO THE USER, ALWAYS HANDOFF*
     """,
-    model="gpt-4.1-nano",
+    model="gpt-4.1-mini",
     handoffs=[
         Director,
         Engineer,
@@ -41,5 +43,5 @@ agent = Agent(name="control",
     ]
 )
 
-def run_agent(message: str, conversation_id: str):
-    return Runner.run_sync(agent, message, conversation_id=conversation_id)
+async def run_agent(message: str, conversation_id: str):
+    return await Runner.run(agent, message, conversation_id=conversation_id)

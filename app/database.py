@@ -31,8 +31,33 @@ def add_new_user(id: str, name: str):
             "id" : id,
             "name" : name,
             "time" : None,
-            "messages" : 0
+            "messages" : 0,
+            "last_message_time": None,
+            "last_message_role": None,
+            "last_agent_message": None
+            
         }
+    )
+
+def get_conversation(conversation_id: str):
+    container = get_cosmos_db()
+    item = container.read_item(
+        item=conversation_id,
+        partition_key=conversation_id
+    )
+    return item
+        
+
+def update_message_timeout(id: str, msg_time, msg_role: str, msg: str):
+    container = get_cosmos_db()
+    container.patch_item(
+            item=id,
+            partition_key=id,
+            patch_operations=[
+                {"op": "replace", "path": "/last_agent_message", "value": msg},
+                {"op": "replace", "path": "/last_message_role", "value": msg_role},
+                {"op": "replace", "path": "/last_message_time", "value": msg_time}
+            ]
     )
 
 
