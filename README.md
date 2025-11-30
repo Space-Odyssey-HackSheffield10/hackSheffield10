@@ -10,6 +10,9 @@ Space Odyssey is a first-person game where you must try to safely land your spac
 - Azure Cosmos DB for data storage
 - Prometheus and Grafana for data collection and visualization
 
+## Grafana Dashboard
+app/src/res/grafana_dashboard.png
+
 ## Running the Application
 To run the application locally follow these simple steps in a terminal:
 ```
@@ -17,7 +20,7 @@ python -m venv .venv
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-Then to run it 
+Then to run it
 ```
 fastapi dev main.py # DEV version
 ```
