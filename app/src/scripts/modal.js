@@ -45,13 +45,16 @@ async function sendMessage() {
     input.value = "";
 
     try {
-        const response = await fetch("/chat", {
+        // Get player name from global scope
+        const playerName = window.playerName || "anonymous";
+
+        const response = await fetch("http://localhost:8000/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*"
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 message,
                 conversation_id
             })

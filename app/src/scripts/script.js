@@ -2,6 +2,11 @@ const audio = document.getElementById('backgroundMusic');
 
 async function closeStartingScreen() {
     const startingScreen = document.getElementById('startingScreen');
+    const nameInput = document.querySelector('.starting-screen input');
+
+    // Get player name from input
+    playerName = nameInput.value.trim() || "anonymous";
+
     startingScreen.style.display = 'none';
 
     // add the user to database and save the conversation id
@@ -93,6 +98,28 @@ function showOutOfTimeModal(){
     outOfTimeModal.classList.add("modal-content-center");
 }
 
+function recordGameEnd(success) {
+    if (!gameStartTime) return;
+    
+    const duration = (Date.now() - gameStartTime) / 1000; // Convert to seconds
+    const conversationId = localStorage.getItem("conversation_id") || "";
+    
+    fetch("http://localhost:8000/game/end", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            conversation_id: conversationId,
+            player_name: playerName,
+            duration: duration,
+            success: success
+        })
+    }).catch(err => console.error("Failed to record game end:", err));
+}
+
+// Export playerName so other scripts can use it
+window.playerName = playerName;
 function showWonModal(){
     wonModal.style.display = "flex";
     wonModal.classList.add("show");

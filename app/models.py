@@ -28,3 +28,14 @@ class AddTimeRequest(BaseModel):
 
 class AddMessagesRequest(BaseModel):
     conversation_id: str = Field(description="the conversation id")
+
+class GameEndRequest(BaseModel):
+    conversation_id: str = Field(description="the conversation id")
+    player_name: str = Field(description="the player's name")
+    duration: float = Field(description="game duration in seconds")
+    success: bool = Field(description="whether the game was successful")
+
+class PuzzleCompleteRequest(BaseModel):
+    conversation_id: str = Field(description="the conversation id")
+    player_name: str = Field(description="the player's name")
+    puzzle_name: str = Field(default="unknown", description="the puzzle that was completed")
