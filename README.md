@@ -11,6 +11,7 @@ Space Odyssey is a first-person game where you must try to safely land your spac
 - Prometheus and Grafana for data collection and visualization
 
 ## Grafana Dashboard
+![Grafana Dashboard](app/src/res/grafana_dashboard.png "Grafana Dashboard")
 app/src/res/grafana_dashboard.png
 
 ## Running the Application
