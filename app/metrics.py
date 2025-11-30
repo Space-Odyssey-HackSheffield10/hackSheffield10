@@ -3,6 +3,10 @@ Prometheus metrics for Space Odyssey game tracking
 """
 
 from prometheus_client import Counter, Gauge, Histogram, Info
+from typing import List, Dict
+import logging
+
+LOGGER = logging.getLogger(__name__)
 
 # Player info
 player_info = Info('player_name', 'Player name and session info')
@@ -62,6 +66,30 @@ agent_response_time = Histogram(
     ['agent_type']
 )
 
+# Cosmos DB Metrics - Gauges that will be updated from DB
+player_time_remaining = Gauge(
+    'player_time_remaining_seconds',
+    'Time remaining for each player in seconds',
+    ['player', 'conversation_id']
+)
+
+player_message_count = Gauge(
+    'player_message_count',
+    'Number of messages sent by each player',
+    ['player', 'conversation_id']
+)
+
+total_active_players = Gauge(
+    'total_active_players',
+    'Total number of active players in the game'
+)
+
+player_last_activity = Gauge(
+    'player_last_activity_timestamp',
+    'Unix timestamp of player last activity',
+    ['player', 'conversation_id']
+)
+
 
 class MetricsTracker:
     """Helper class to track game metrics"""
@@ -111,3 +139,46 @@ class MetricsTracker:
     def record_agent_response_time(agent_type: str, duration: float):
         """Record agent response time"""
         agent_response_time.labels(agent_type=agent_type).observe(duration)
+    
+    @staticmethod
+    def update_from_cosmos_db(users_data: List[Dict]):
+        """Update metrics from Cosmos DB user data"""
+        try:
+            # Update total active players
+            total_active_players.set(len(users_data))
+            
+            for user in users_data:
+                conversation_id = user.get('id', 'unknown')
+                player_name = user.get('name', 'anonymous')
+                time_remaining = user.get('time', 0)
+                message_count = user.get('messages', 0)
+                last_msg_time = user.get('last_message_time')
+                
+                # Update time remaining
+                if time_remaining is not None:
+                    player_time_remaining.labels(
+                        player=player_name,
+                        conversation_id=conversation_id
+                    ).set(time_remaining)
+                
+                # Update message count
+                player_message_count.labels(
+                    player=player_name,
+                    conversation_id=conversation_id
+                ).set(message_count)
+                
+                # Update last activity timestamp
+                if last_msg_time:
+                    try:
+                        from datetime import datetime
+                        timestamp = datetime.fromisoformat(last_msg_time.replace('Z', '+00:00')).timestamp()
+                        player_last_activity.labels(
+                            player=player_name,
+                            conversation_id=conversation_id
+                        ).set(timestamp)
+                    except Exception as e:
+                        LOGGER.warning(f"Failed to parse timestamp for {player_name}: {e}")
+                        
+        except Exception as e:
+            LOGGER.error(f"Error updating metrics from Cosmos DB: {e}")
+

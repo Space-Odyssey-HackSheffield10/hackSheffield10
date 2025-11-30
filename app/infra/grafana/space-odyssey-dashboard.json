@@ -56,8 +56,8 @@
         },
         "targets": [
           {
-            "expr": "game_duration_seconds{player=\"$player\"}",
-            "legendFormat": "Your Time",
+            "expr": "player_time_remaining_seconds{player=\"$player\"}",
+            "legendFormat": "Time Remaining",
             "refId": "A"
           }
         ],
@@ -73,9 +73,9 @@
             "thresholds": {
               "mode": "absolute",
               "steps": [
-                {"color": "green", "value": null},
-                {"color": "yellow", "value": 60},
-                {"color": "red", "value": 90}
+                {"color": "red", "value": null},
+                {"color": "yellow", "value": 30},
+                {"color": "green", "value": 60}
               ]
             }
           }
@@ -123,7 +123,7 @@
         },
         "targets": [
           {
-            "expr": "sort_desc(game_duration_seconds)",
+            "expr": "sort_desc(player_time_remaining_seconds)",
             "legendFormat": "{{player}}",
             "refId": "A"
           }
@@ -207,7 +207,7 @@
         },
         "targets": [
           {
-            "expr": "sort_desc(chat_messages_total{sender=\"user\"})",
+            "expr": "sort_desc(player_message_count)",
             "legendFormat": "{{player}}",
             "refId": "A"
           }
