@@ -11,16 +11,24 @@ import asyncio
 import json
 
 # Local Imports
-from app.models import AgentRequest, AgentResponse, StartGameResponse, StartGameRequest, AddTimeRequest, AddMessagesRequest, PuzzleList
+from app.models import (
+    AgentRequest, AgentResponse, StartGameResponse, StartGameRequest, 
+    AddTimeRequest, AddMessagesRequest, PuzzleList,GameEndRequest, PuzzleCompleteRequest
+)
 from app.agents.triage_agent import run_agent
-from app.database import add_new_user, get_cosmos_db, update_user_time, update_user_messages, update_message_timeout, save_list
+from app.database import add_new_user, get_cosmos_db, update_user_time, update_user_messages, update_message_timeout, save_list, get_all_users, get_conversation
 from app.timeout_manager import timeout_watchdog
+from app.metrics import MetricsTracker
 
 # Third Party Imports
 from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
+import time
+
+# Prometheus
+from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi.responses import FileResponse, StreamingResponse
 from openai import OpenAI
 
@@ -36,6 +44,9 @@ app = FastAPI()
 favicon_path = 'favicon.ico'
 client = get_cosmos_db()
 openai_client = OpenAI(api_key=key)
+
+# Instrument the FastAPI app
+Instrumentator().instrument(app).expose(app)
 
 # Middleware
 app.add_middleware(
@@ -64,8 +75,28 @@ async def favicon():
 @app.post("/chat", response_model=AgentResponse)
 async def chat(body: AgentRequest, background_tasks: BackgroundTasks):
     try:
-        # Run agent
+        # Get player name from conversation
+        player_name = 'anonymous'
+        try:
+            conv_data = await asyncio.to_thread(get_conversation, body.conversation_id)
+            player_name = conv_data.get('name', 'anonymous')
+        except:
+            pass
+        
+        # Record user message
+        MetricsTracker.record_user_message(player_name)
+        
+        # Track agent response time
+        start_time = time.time()
         response = await run_agent(body.message, body.conversation_id)
+        response_time = time.time() - start_time
+        
+        # Determine agent type from response
+        agent_type = getattr(response.last_agent, 'name', 'triage') if hasattr(response, 'last_agent') else 'triage'
+        MetricsTracker.record_agent_response_time(agent_type, response_time)
+        
+        # Record agent message
+        MetricsTracker.record_agent_message(player_name, agent_type)
         
         # Update DB
         update_message_timeout(body.conversation_id, datetime.now(UTC).isoformat(), "agent", response.final_output)
@@ -120,6 +151,31 @@ def add_messages(body: AddMessagesRequest):
     except Exception as e:
         raise e
 
+# -------------------- GAME METRICS --------------------
+@app.post("/game/end")
+def game_end(body: GameEndRequest):
+    """Record game completion metrics"""
+    try:
+        MetricsTracker.record_game_completion(
+            body.player_name,
+            body.duration,
+            body.success
+        )
+        return {"status": "success"}
+    except Exception as e:
+        LOGGER.error(f"Error recording game end: {e}")
+        raise e
+
+@app.post("/puzzle/complete")
+def puzzle_complete(body: PuzzleCompleteRequest):
+    """Record puzzle completion metrics"""
+    try:
+        MetricsTracker.record_puzzle_completion(body.player_name)
+        return {"status": "success"}
+    except Exception as e:
+        LOGGER.error(f"Error recording puzzle completion: {e}")
+        raise e
+
 # -------------------- SSE EVENTS --------------------
 @app.get("/events/{conversation_id}")
 async def sse_events(conversation_id: str):
@@ -142,3 +198,26 @@ async def sse_events(conversation_id: str):
 async def update_list(puzzle: PuzzleList):
     # Upsert so if the conversation_id exists, it updates
     save_list(puzzle.conversation_id, puzzle.num_list)
+# -------------------- BACKGROUND TASKS --------------------
+async def update_metrics_from_db():
+    """Background task to periodically update Prometheus metrics from Cosmos DB"""
+    while True:
+        try:
+            # Fetch all users from Cosmos DB
+            users = await asyncio.to_thread(get_all_users)
+            
+            # Update metrics
+            MetricsTracker.update_from_cosmos_db(users)
+            
+            LOGGER.info(f"Updated metrics for {len(users)} users from Cosmos DB")
+        except Exception as e:
+            LOGGER.error(f"Error updating metrics from Cosmos DB: {e}")
+        
+        # Wait 10 seconds before next update
+        await asyncio.sleep(10)
+
+@app.on_event("startup")
+async def startup_event():
+    """Start background tasks on application startup"""
+    LOGGER.info("Starting background metrics update task")
+    asyncio.create_task(update_metrics_from_db())

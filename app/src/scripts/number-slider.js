@@ -2,6 +2,7 @@ let tiles = [];
 let emptyIndex = 8;
 let moves = 0;
 let num_list = [1, 2, 3, 4, 5, 6, 7, 8];
+let won = false;
 
 async function sendNumListOnce() {
     const conversation_id = localStorage.getItem("conversation_id") || crypto.randomUUID();
@@ -140,14 +141,35 @@ async function checkWin() {
         if (index === 8) return value === 0;
         return value === num_list[index];
     });
-    const conversation_id = localStorage.getItem("conversation_id")
+    const conversation_id = localStorage.getItem("conversation_id");
+    const playerName = localStorage.getItem("username") || "anonymous";
 
     if (isSolved && moves > 0) {
         document.getElementById('winMessage').classList.add('show');
+        won = true;
 
         const counter = document.getElementById("timer");
         const [minutes, seconds] = counter.innerHTML.split(":").map(Number);
         const time = (minutes * 60) + seconds
+
+        // Record puzzle completion metric
+        try {
+            await fetch("/puzzle/complete", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify({
+                    conversation_id,
+                    player_name: playerName,
+                    puzzle_name: "number-slider"
+                })
+            });
+            console.log("SUCCESS recorded puzzle completion");
+        } catch (err) {
+            console.error("Failed to record puzzle completion:", err);
+        }
 
         try {
             const response = await fetch("/add_time", {
@@ -156,7 +178,7 @@ async function checkWin() {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*"
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     conversation_id,
                     time
                 })
@@ -173,7 +195,7 @@ async function checkWin() {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*"
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     conversation_id
                 })
             });

@@ -107,3 +107,12 @@ def get_list(conversation_id: str):
         return item["num_list"]
     except Exception:
         return None
+def get_all_users():
+    """Fetch all users from the database"""
+    container = get_cosmos_db()
+    query = "SELECT * FROM c"
+    items = list(container.query_items(
+        query=query,
+        enable_cross_partition_query=True
+    ))
+    return items

@@ -69,7 +69,7 @@
                 <div class="chat-container">
                     <p>You ran out of time, you weren't able to successfully land the spaceship.</p>
                     <p>Rest in Peace</p>
-                    <p>Click the following link for game stats: <u>link</u></p>
+                    <p>Click the following link for game stats: <a href="http://localhost:3000/d/space-odyssey-v3/space-odyssey-dashboard" target="_blank"><u>View Dashboard</u></a></p>
                 </div>
             </div>
         </div>
@@ -77,6 +77,18 @@
          <!-- Failed Puzzles Modal -->
 
          <!-- Win Modal -->
+        <div id="wonModal" class="modal">
+            <div class="modal-content">
+                <div class="chat-container">
+                    <audio id="victoryMusic">
+                        <source src="/app/src/res/victory-chime-366449.mp3" type="audio/mpeg">
+                    </audio>
+                    <p>Horray! You were able to successfully land the spaceship.</p>
+                    <p>Click the following link for game stats: <a href="http://localhost:3000/d/space-odyssey-v3/space-odyssey-dashboard" target="_blank"><u>View Dashboard</u></a></p>
+                </div>
+            </div>
+        </div>
+
     </div>
     <script src="/app/src/scripts/script.js"></script>
     <script src="/app/src/scripts/number-slider.js"></script>

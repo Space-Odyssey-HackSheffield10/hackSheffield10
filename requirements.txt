@@ -2,4 +2,6 @@ fastapi[standard]
 jinja2
 pydantic
 openai-agents
+prometheus-client
+prometheus-fastapi-instrumentator
 azure-cosmos
