@@ -108,7 +108,8 @@ async function checkWin() {
         if (index === 15) return value === 0;
         return value === index + 1;
     });
-    const conversation_id = localStorage.getItem("conversation_id")
+    const conversation_id = localStorage.getItem("conversation_id");
+    const playerName = localStorage.getItem("username") || "anonymous";
 
     if (isSolved && moves > 0) {
         document.getElementById('winMessage').classList.add('show');
@@ -116,6 +117,24 @@ async function checkWin() {
         const counter = document.getElementById("timer");
         const [minutes, seconds] = counter.innerHTML.split(":").map(Number);
         const time = (minutes * 60) + seconds
+
+        // Record puzzle completion metric
+        try {
+            await fetch("/puzzle/complete", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    conversation_id,
+                    player_name: playerName,
+                    puzzle_name: "number-slider"
+                })
+            });
+            console.log("SUCCESS recorded puzzle completion");
+        } catch (err) {
+            console.error("Failed to record puzzle completion:", err);
+        }
 
         try {
             const response = await fetch("/add_time", {

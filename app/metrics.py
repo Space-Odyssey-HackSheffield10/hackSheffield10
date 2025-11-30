@@ -90,6 +90,23 @@ player_last_activity = Gauge(
     ['player', 'conversation_id']
 )
 
+# Initialize counters with zero values to ensure they appear in metrics
+# This ensures Grafana can query them even before any events occur
+def _initialize_metrics():
+    """Initialize all counter metrics with zero values"""
+    # Initialize with a dummy player to ensure metrics exist
+    game_completed.labels(player='_init', status='success')
+    game_completed.labels(player='_init', status='timeout')
+    puzzle_completions_total.labels(player='_init')
+    puzzle_attempts_total.labels(player='_init')
+    chat_messages_total.labels(player='_init', sender='user')
+    chat_messages_total.labels(player='_init', sender='agent')
+    agent_messages_by_type.labels(player='_init', agent_type='unknown')
+    game_timeouts_total.labels(player='_init')
+
+# Initialize metrics on import
+_initialize_metrics()
+
 
 class MetricsTracker:
     """Helper class to track game metrics"""

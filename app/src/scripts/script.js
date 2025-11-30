@@ -85,6 +85,7 @@ function recordGameEnd(success) {
     if (!gameStartTime) return;
     
     const duration = (Date.now() - gameStartTime) / 1000; // Convert to seconds
+    const conversationId = localStorage.getItem("conversation_id") || "";
     
     fetch("http://localhost:8000/game/end", {
         method: "POST",
@@ -92,6 +93,7 @@ function recordGameEnd(success) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
+            conversation_id: conversationId,
             player_name: playerName,
             duration: duration,
             success: success

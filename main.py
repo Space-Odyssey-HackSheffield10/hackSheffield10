@@ -11,7 +11,10 @@ import asyncio
 import json
 
 # Local Imports
-from app.models import AgentRequest, AgentResponse, StartGameResponse, StartGameRequest, AddTimeRequest, AddMessagesRequest
+from app.models import (
+    AgentRequest, AgentResponse, StartGameResponse, StartGameRequest, 
+    AddTimeRequest, AddMessagesRequest, GameEndRequest, PuzzleCompleteRequest
+)
 from app.agents.triage_agent import run_agent
 from app.database import add_new_user, get_cosmos_db, update_user_time, update_user_messages, update_message_timeout, get_all_users, get_conversation
 from app.timeout_manager import timeout_watchdog
@@ -146,6 +149,31 @@ def add_messages(body: AddMessagesRequest):
         messages = len(conv.data)
         update_user_messages(body.conversation_id, messages)
     except Exception as e:
+        raise e
+
+# -------------------- GAME METRICS --------------------
+@app.post("/game/end")
+def game_end(body: GameEndRequest):
+    """Record game completion metrics"""
+    try:
+        MetricsTracker.record_game_completion(
+            body.player_name,
+            body.duration,
+            body.success
+        )
+        return {"status": "success"}
+    except Exception as e:
+        LOGGER.error(f"Error recording game end: {e}")
+        raise e
+
+@app.post("/puzzle/complete")
+def puzzle_complete(body: PuzzleCompleteRequest):
+    """Record puzzle completion metrics"""
+    try:
+        MetricsTracker.record_puzzle_completion(body.player_name)
+        return {"status": "success"}
+    except Exception as e:
+        LOGGER.error(f"Error recording puzzle completion: {e}")
         raise e
 
 # -------------------- SSE EVENTS --------------------
